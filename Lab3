@@ -1,0 +1,94 @@
+class LabWork3
+{
+    static void Main(string[] args)
+    {
+        Console.WriteLine("Тестирование Power():");
+        Debug.Assert(Power(2, 3) == 8);
+        Debug.Assert(Power(5, 0) == 1);
+        Debug.Assert(Power(2, -3) == 0.125);
+        Debug.Assert(Power(-2, 3) == -8);
+        Debug.Assert(Math.Abs(Power(1.5, 2) - 2.25) < 0.0001);
+        Console.WriteLine("Power() работает корректно\n");
+
+        Console.WriteLine("Тестирование FastPower():");
+        Debug.Assert(FastPower(2, 10) == 1024);
+        Debug.Assert(FastPower(3, 5) == 243);
+        Debug.Assert(FastPower(5, 0) == 1);
+        Debug.Assert(FastPower(2, 1) == 2);
+        Debug.Assert(FastPower(1.5, 4) == 5.0625);
+        Debug.Assert(FastPower(2, -5) == -1); 
+        Console.WriteLine("FastPower() работает корректно\n");
+
+        Console.WriteLine("Тестирование Fibonacci:");
+        int[] testN = { 0, 1, 2, 5, 10, 20 };
+        long[] expected = { 0, 1, 1, 5, 55, 6765 };
+
+        for (int i = 0; i < testN.Length; i++)
+        {
+            Debug.Assert(Fibonacci(testN[i]) == expected[i]);
+            Debug.Assert(FibonacciTail(testN[i]) == expected[i]);
+        }
+        Debug.Assert(Fibonacci(-5) == -1);
+        Debug.Assert(FibonacciTail(-5) == -1);
+        Console.WriteLine("Оба метода Fibonacci работают корректно");
+    }
+
+
+    static double Power(double x, int n)
+    {
+        if (n == 0)
+            return 1;
+
+        if (n < 0)
+            return 1 / Power(x, -n);
+
+        return x * Power(x, n - 1);
+    }
+    // Сложность: O(n)
+
+    static double FastPower(double x, int n)
+    {
+        if (n < 0)
+            return -1;
+        if (n == 0)
+            return 1;
+        if (n == 1)
+            return x;
+
+        double halfPower = FastPower(x, n / 2);
+
+        if (n % 2 == 0)
+            return halfPower * halfPower;
+
+        return x * halfPower * halfPower;
+    }
+    // Сложность: O(log n)
+
+    static long Fibonacci(int n)
+    {
+        if (n < 0)
+            return -1;
+
+        if (n == 0)
+            return 0;
+        if (n == 1)
+            return 1;
+
+        return Fibonacci(n - 1) + Fibonacci(n - 2);
+    }
+    // Сложность: O(2^n)
+
+    static long FibonacciTail(int n, long a = 0, long b = 1)
+    {
+        if (n < 0)
+            return -1;
+
+        if (n == 0)
+            return a;
+        if (n == 1)
+            return b;
+
+        return FibonacciTail(n - 1, b, a + b);
+    }
+    // Сложность: O(n)
+}
