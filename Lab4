@@ -1,0 +1,92 @@
+class Program
+{
+    static void Main(string[] args)
+    {
+        int[] canonicalCoins = { 10, 5, 2, 1 };
+        int[] nonCanonicalCoins = { 4, 3, 1 };
+
+
+        var change1 = GreedyCoinChange(28, canonicalCoins);
+        Console.WriteLine($"Сумма 28, монеты [10,5,2,1]: {string.Join(", ", change1)}");
+        Console.WriteLine($"Количество монет: {change1.Count}");
+
+        var change2 = GreedyCoinChange(3, canonicalCoins);
+        Console.WriteLine($"Сумма 3, монеты [10,5,2,1]: {string.Join(", ", change2)}");
+
+        var change3 = GreedyCoinChange(6, nonCanonicalCoins);
+        Console.WriteLine($"\nПроблема неканонической системы:");
+        Console.WriteLine($"Сумма 6, монеты [4,3,1]: {string.Join(", ", change3)}");
+        Console.WriteLine($"Алгоритм даёт {change3.Count} монет (4,1,1)");
+        Console.WriteLine($"Оптимальное решение: 2 монеты (3,3)");
+
+
+        int[] testArray1 = { 1, 3, 7, 5, 8 };
+        int[] testArray2 = { 10, 5, 2, 8, 4 };
+        int[] testArray3 = { 1, 2, 3, 4, 5 };
+        int[] testArray4 = { 5, 4, 3, 2, 1 };
+
+        Console.WriteLine($"Массив [{string.Join(", ", testArray1)}]:");
+        int idx1 = FindLocalMaximum(testArray1);
+        Console.WriteLine($"  Первый локальный максимум: arr[{idx1}] = {testArray1[idx1]}");
+        Console.WriteLine($"  Глобальный максимум: 8 (arr[4])");
+
+        Console.WriteLine($"\nМассив [{string.Join(", ", testArray2)}]:");
+        int idx2 = FindLocalMaximum(testArray2);
+        Console.WriteLine($"  Первый локальный максимум: arr[{idx2}] = {testArray2[idx2]}");
+
+        Console.WriteLine($"\nМассив [{string.Join(", ", testArray3)}]:");
+        int idx3 = FindLocalMaximum(testArray3);
+        Console.WriteLine($"  Первый локальный максимум: arr[{idx3}] = {testArray3[idx3]}");
+
+        Console.WriteLine($"\nМассив [{string.Join(", ", testArray4)}]:");
+        int idx4 = FindLocalMaximum(testArray4);
+        Console.WriteLine($"  Первый локальный максимум: arr[{idx4}] = {testArray4[idx4]}");
+    }
+
+    static List<int> GreedyCoinChange(int amount, int[] coins)
+    {
+        Array.Sort(coins);
+        Array.Reverse(coins);
+
+        List<int> result = new List<int>();
+        int remaining = amount;
+
+        foreach (int coin in coins)
+        {
+            while (remaining >= coin)
+            {
+                result.Add(coin);
+                remaining -= coin;
+            }
+        }
+
+        if (remaining != 0)
+            return new List<int>(); 
+
+        return result;
+    }
+
+    static int FindLocalMaximum(int[] arr)
+    {
+        if (arr == null || arr.Length == 0)
+            return -1;
+
+        if (arr.Length == 1)
+            return 0;
+
+        if (arr[0] >= arr[1])
+            return 0;
+
+        for (int i = 1; i < arr.Length - 1; i++)
+        {
+            if (arr[i] >= arr[i - 1] && arr[i] >= arr[i + 1])
+                return i;
+        }
+
+        if (arr[^1] >= arr[^2])
+            return arr.Length - 1;
+
+        return -1; 
+    }
+    // Сложность: O(n)
+}
