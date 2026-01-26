@@ -1,0 +1,172 @@
+Calculator.cs
+internal class Calculator
+{
+    public double RationalPower(double x, int n)
+    {
+        if (x == 0 || n < 0)
+            return -1;
+
+        double result = 1;
+
+        for (int i = 0; i < n; i++)
+        {
+            result *= x;
+        }
+        return 1 / result;
+    }
+
+    public double RationalPower(double x)
+    {
+        if (x == 0)
+            return -1;
+        return 1 / x;
+    }
+}
+
+Flight.cs
+internal class Flight
+{
+    public string Destination { get; set; }
+    public string Number { get; set; }
+    public int Capacity { get; set; }
+
+    public Flight() : this("Не указан", "0000", 0) { }
+
+    public Flight(string destination, string number, int capacity)
+    {
+        Destination = destination;
+        Number = number;
+        Capacity = capacity;
+    }
+
+    public void PrintProperties()
+    {
+        Console.WriteLine($"Пункт назначения: {Destination}, номер рейса {Number}, вместимость {Capacity}");
+    }
+}
+
+FlightsCatalog.cs
+internal class FlightsCatalog
+{
+    private Flight[] flights;
+
+    public FlightsCatalog()
+    {
+        flights = new Flight[]
+        {
+        new Flight("Москва", "S100", 150),
+        new Flight("Париж", "A250", 95),
+        new Flight("Лондон", "B300", 120),
+        new Flight("Берлин", "L400", 80),
+        new Flight("Москва", "U200", 200)
+        };
+    }
+
+    public void Find(string destination)
+    {
+        Console.WriteLine($"Рейсы до пункта назначения {destination}:");
+        bool found = false;
+        foreach (var flight in flights)
+        {
+            if (flight.Destination == destination)
+            {
+                flight.PrintProperties();
+                Console.WriteLine();
+                found = true;
+            }
+        }
+        if (!found)
+            Console.WriteLine("Рейсы не найдены\n");
+    }
+
+    public void Find()
+    {
+        Console.WriteLine("Рейсы вместимостью больше 100:");
+        bool found = false;
+        foreach (var flight in flights)
+        {
+            if (flight.Capacity > 100)
+            {
+                flight.PrintProperties();
+                Console.WriteLine();
+                found = true;
+            }
+        }
+        if (!found)
+            Console.WriteLine("Рейсы не найдены\n");
+    }
+
+    public Flight this[int index]
+    {
+        get
+        {
+            if (index >= 0 && index < flights.Length)
+                return flights[index];
+            return null;
+        }
+    }
+
+    public object this[int index, int propertyIndex]
+    {
+        get
+        {
+            if (index < 0 || index >= flights.Length)
+                return -1;
+
+            if (propertyIndex == 1)
+                return flights[index].Destination;
+            if (propertyIndex == 2)
+                return flights[index].Number;
+            if (propertyIndex == 3)
+                return flights[index].Capacity;
+            else
+                return -1;
+        }
+    }
+}
+
+Program.cs
+#region 1
+Calculator calculator = new Calculator();
+
+Debug.Assert(calculator.RationalPower(2, 3) == 0.125, "Ошибка: 1/2^3 должно быть 0.125");
+Debug.Assert(calculator.RationalPower(5, 0) == 1, "Ошибка: 1/5^0 должно быть 1");
+Debug.Assert(calculator.RationalPower(0, 5) == -1, "Ошибка: деление на 0 должно вернуть -1");
+Debug.Assert(calculator.RationalPower(2, -1) == -1, "Ошибка: отрицательная степень должна вернуть -1");
+Console.WriteLine("Метод RationalPower прошел все тесты");
+
+Debug.Assert(calculator.RationalPower(4) == 0.25, "Ошибка: 1/4 должно быть 0.25");
+Debug.Assert(calculator.RationalPower(0) == -1, "Ошибка: 1/0 должно вернуть -1");
+Console.WriteLine("Метод RationalPower с перегрузкой прошел все тесты\n");
+#endregion
+
+#region 2
+Flight flight1 = new Flight();
+Flight flight2 = new Flight("Нью-Йорк", "A500", 250);
+
+Console.WriteLine("Рейс 1 (конструктор по умолчанию):");
+flight1.PrintProperties();
+Console.WriteLine("\nРейс 2 (конструктор с параметрами):");
+flight2.PrintProperties();
+#endregion
+
+#region 3
+FlightsCatalog catalog = new FlightsCatalog();
+Console.WriteLine();
+catalog.Find("Москва");
+catalog.Find();
+catalog.Find("Рим");
+#endregion
+
+#region 4
+Debug.Assert(catalog[0] != null, "Ошибка: Индексатор [0] должен возвращать Москва");
+Debug.Assert(catalog[2] != null, "Ошибка: Индексатор [2] должен возвращать Лондон");
+Debug.Assert(catalog[10] == null, "Ошибка: элемента с таким индесом нету");
+
+Debug.Assert((string)catalog[0, 1] == "Москва", "Ошибка: Индексатор [0,1] должен возвращать Москва");
+Debug.Assert((string)catalog[1, 2] == "A250", "Ошибка: Индексатор [1,2] должен возвращать A250");
+Debug.Assert((int)catalog[2, 3] == 120, "Ошибка: Индексатор [2,3] должен возвращать 120");
+Debug.Assert((int)catalog[10, 1] == -1, "Ошибка: Индексатор [10,1] должен возвращать -1");
+Debug.Assert((int)catalog[-1, 1] == -1, "Ошибка: Индексатор [-1,1] должен возвращать -1");
+Console.WriteLine("\nВсе тесты завершены успешно!");
+#endregion
