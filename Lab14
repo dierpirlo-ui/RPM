@@ -1,0 +1,80 @@
+static void PhoneNumber()
+{
+    Regex regex = new(@"^(\+7|8)\(9\d{2}\)\d{3}-\d{2}-\d{2}$");
+    Console.Write("Введите номер телефона: ");
+    string? phone = Console.ReadLine();
+    if (regex.IsMatch(phone))
+    {
+        Console.WriteLine("Номер корректный");
+    }
+    else 
+    {
+        Console.WriteLine("Номер некорректный");
+    }
+}
+
+static void ReplaceSpaces()
+{
+    Regex regex = new(@"\s{2,}");
+    Console.Write("Введите строку: ");
+    string? input = Console.ReadLine();
+    string result = regex.Replace(input, " ");
+    Console.WriteLine($"Исходная строка: {input}");
+    Console.WriteLine($"Строка после замены: {result}");
+}
+
+static void EmailCheck()
+{
+    Regex regex = new(@"^[a-z0-9_-]+@[a-z0-9]+(\.[a-z0-9])*\.[a-z]+$", RegexOptions.IgnoreCase);
+    Console.Write("Введите свой email: ");
+    string? email = Console.ReadLine();
+    if (regex.IsMatch(email))
+    {
+        Console.WriteLine("Email корректный");
+    }
+    else
+    {
+        Console.WriteLine("Email некорректный");
+    }
+}
+
+static void PasswordCheck()
+{
+    Regex regex = new(@"^(?=.*\d)(?=.*[a-z])(?=.*[A-Z])(?=.*[?!.]).{6,}$");
+    bool isValid;
+    do
+    {
+        Console.WriteLine("Введите пароль: ");
+        string? password = Console.ReadLine();
+        isValid = regex.IsMatch(password);
+        if (!isValid)
+        {
+            Console.WriteLine("Пароль не соответствует требованиям");
+        }
+    }
+    while (!isValid);
+    Console.WriteLine("Пароль сохранен");
+}
+
+static void DataFormat()
+{
+    Regex regex = new(@"\b(?<day>\d{1,2})[./](?<month>\d{1,2})[./](?<year>\d{2,4})\b");
+    Console.WriteLine("Введите текст с датами в формате дд.мм.гггг или дд/мм/гггг:");
+    string? input = Console.ReadLine();
+
+    string result = regex.Replace(input, match =>
+    {
+        string day = match.Groups["day"].Value.PadLeft(2, '0');
+        string month = match.Groups["month"].Value.PadLeft(2, '0');
+        string year = match.Groups["year"].Value;
+        return $"{year}-{month}-{day}";
+    });
+
+    Console.WriteLine($"Результат: {result}");
+}
+
+PhoneNumber();
+ReplaceSpaces();
+EmailCheck();
+PasswordCheck();
+DataFormat();
