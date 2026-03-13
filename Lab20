@@ -1,0 +1,140 @@
+CatsController.cs
+using Microsoft.AspNetCore.Http;
+using LabWork20.Models;
+using Microsoft.AspNetCore.Mvc;
+
+namespace LabWork20.Controllers
+{
+    [Route("api/v1/[controller]")]
+    [ApiController]
+    public class CatsController : ControllerBase
+    {
+        private List<Cat> _cats =
+        [
+            new() { Id = 1, Name = "Усатик", Breed = "Персидская", Color = "Белый", Age = 5 },
+            new() { Id = 2, Name = "Варежка", Breed = "Сиамская", Color = "Сил-пойнт", Age = 3 },
+            new() { Id = 3, Name = "Дымок", Breed = "Британская короткошерстная", Color = "Серый", Age = 7 },
+            new() { Id = 4, Name = "Белла", Breed = "Мейн-кун", Color = "Рыжий", Age = 4 },
+            new() { Id = 5, Name = "Макс", Breed = "Рэгдолл", Color = "Сил-миттед", Age = 2 },
+            new() { Id = 6, Name = "Луна", Breed = "Персидская", Color = "Трехцветная", Age = 6 },
+            new() { Id = 7, Name = "Оливер", Breed = "Британская короткошерстная", Color = "Черный", Age = 8 },
+            new() { Id = 8, Name = "Клео", Breed = "Сиамская", Color = "Коричневый", Age = 3 },
+            new() { Id = 9, Name = "Симба", Breed = "Мейн-кун", Color = "Рыжий", Age = 5 },
+            new() { Id = 10, Name = "Ромашка", Breed = "Персидская", Color = "Белый", Age = 2 }
+        ];
+
+        [HttpGet]
+        public ActionResult<IEnumerable<Cat>> Get([FromQuery] int? pageNumber = null, [FromQuery] int? pageSize = null)
+        {
+            if ((pageNumber.HasValue && pageNumber < 1) || (pageSize.HasValue && pageSize < 1))
+            {
+                return BadRequest();
+            }
+
+            if (!pageNumber.HasValue || !pageSize.HasValue)
+            {
+                return Ok(_cats);
+            }
+
+            var paginatedCats = _cats
+                .Skip((pageNumber.Value - 1) * pageSize.Value)
+                .Take(pageSize.Value);
+
+            return Ok(paginatedCats);
+        }
+
+        [HttpGet("{id:int}")]
+        public ActionResult<Cat> GetById([FromRoute] int id)
+        {
+            if (!_cats.Any(cat => cat.Id == id))
+            {
+                return NotFound();
+            }
+
+            return Ok(_cats.First(cat => cat.Id == id));
+        }
+
+        [HttpGet("breed/{breed}")]
+        public ActionResult<IEnumerable<Cat>> GetByBreed(string breed)
+        {
+            if (!_cats.Any(c => c.Breed.Equals(breed, StringComparison.OrdinalIgnoreCase)))
+            {
+                return NotFound();
+            }
+
+            return Ok(_cats.Where(c => c.Breed.Equals(breed, StringComparison.OrdinalIgnoreCase)).ToList());
+        }
+
+        [HttpDelete("{id}")]
+        public IActionResult Delete(int id)
+        {
+            if (!_cats.Any(c => c.Id == id))
+            {
+                return NotFound();
+            }
+
+            _cats.Remove(_cats.First(c => c.Id == id));
+
+            return NoContent(); 
+        }
+
+        [HttpPost]
+        public IActionResult Post([FromBody] Cat cat)
+        {
+            if (string.IsNullOrWhiteSpace(cat.Name) ||
+                string.IsNullOrWhiteSpace(cat.Breed) ||
+                string.IsNullOrWhiteSpace(cat.Color))
+            {
+                return BadRequest();
+            }
+
+            if (cat.Age < 0)
+            {
+                return BadRequest();
+            }
+
+            if (_cats.Any(c => c.Id == cat.Id))
+            {
+                return Conflict();
+            }
+
+            _cats.Add(cat);
+
+            return CreatedAtAction(nameof(GetById), new { id = cat.Id }, cat);
+        }
+
+        [HttpPut("{id}")]
+        public IActionResult Put(int id, [FromBody] Cat value)
+        {
+            return StatusCode(204, "12345");
+        }
+    }
+}
+
+cats.cs(Model)
+namespace LabWork20.Models
+{
+    public record struct Cat(int Id, string Name, string Breed, string Color, int Age);
+}
+
+Program.cs
+using Scalar.AspNetCore;
+
+var builder = WebApplication.CreateBuilder(args);
+
+builder.Services.AddControllers();
+builder.Services.AddOpenApi();
+
+var app = builder.Build();
+
+if (app.Environment.IsDevelopment())
+{
+    app.MapOpenApi();
+    app.MapScalarApiReference();
+}
+
+app.UseAuthorization();
+
+app.MapControllers();
+
+app.Run();
