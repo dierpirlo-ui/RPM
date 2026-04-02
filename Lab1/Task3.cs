@@ -4,14 +4,14 @@ int JumpSearch(int[] array, int target)
 {
     int n = array.Length;
     int step = (int)Math.Sqrt(n);
-    int prev = 0;
+    int previous = 0;
 
-    while (prev < n && array[Math.Min(prev + step, n) - 1] < target)
+    while (previous < n && array[Math.Min(previous + step, n) - 1] < target)
     {
-        prev += step;
+        previous += step;
     }
 
-    for (int i = prev; i < Math.Min(prev + step, n); i++)
+    for (int i = previous; i < Math.Min(previous + step, n); i++)
     {
         if (array[i] == target)
             return i;
