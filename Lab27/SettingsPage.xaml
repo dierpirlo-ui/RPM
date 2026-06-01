@@ -1,0 +1,64 @@
+﻿<Page x:Class="LabWork27.Pages.SettingsPage"
+      xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+      xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+      xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+      xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
+      xmlns:local="clr-namespace:LabWork27.Pages"
+      mc:Ignorable="d" 
+      d:DesignHeight="450" d:DesignWidth="800"
+      Title="Настройки">
+
+    <Grid>
+        <TabControl>
+            <TabItem Header="Основные">
+                <StackPanel>
+                    <GroupBox Header="О программе">
+                        <Label Content="Лабораторная работа №27. Организация интерфейса пользователя"/>
+                    </GroupBox>
+
+                    <GroupBox Header="Цветовая тема">
+                        <StackPanel>
+                            <RadioButton Content="Темная"/>
+                            <RadioButton Content="Светлая" IsChecked="True"/>
+                        </StackPanel>
+                    </GroupBox>
+
+                    <GroupBox Header="Размер текста">
+                        <StackPanel>
+                            <RadioButton Content="Мелкий"/>
+                            <RadioButton Content="Средний" IsChecked="True"/>
+                            <RadioButton Content="Большой"/>
+                        </StackPanel>
+                    </GroupBox>
+                </StackPanel>
+            </TabItem>
+
+            <TabItem Header="Дополнительно">
+                <StackPanel>
+                    <Expander Header="О программе">
+                        <Label Content="Лабораторная работа №27. Организация интерфейса пользователя"/>
+                    </Expander>
+
+                    <Expander Header="Цветовая тема">
+                        <StackPanel>
+                            <RadioButton Content="Темная"/>
+                            <RadioButton Content="Светлая" IsChecked="True"/>
+                        </StackPanel>
+                    </Expander>
+
+                    <Expander Header="Размер текста">
+                        <StackPanel>
+                            <RadioButton Content="Мелкий"/>
+                            <RadioButton Content="Средний" IsChecked="True"/>
+                            <RadioButton Content="Большой"/>
+                        </StackPanel>
+                    </Expander>
+                </StackPanel>
+            </TabItem>
+
+            <TabItem Header="Породы кошек">
+                <StackPanel x:Name="CatsPanel"/>
+            </TabItem>
+        </TabControl>
+    </Grid>
+</Page>
