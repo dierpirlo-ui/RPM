@@ -1,0 +1,20 @@
+// набор данных
+List<Cat> cats =
+[
+    new() { Id = 1, Name = "Усатик", Breed = "Персидская", Color = "Белый", Age = 5 },
+    new() { Id = 2, Name = "Варежка", Breed = "Сиамская", Color = "Сил-пойнт", Age = 3 },
+    new() { Id = 3, Name = "Дымок", Breed = "Британская короткошерстная", Color = "Серый", Age = 7 },
+    new() { Id = 4, Name = "Белла", Breed = "Мейн-кун", Color = "Рыжий", Age = 4 },
+    new() { Id = 5, Name = "Макс", Breed = "Рэгдолл", Color = "Сил-миттед", Age = 2 },
+    new() { Id = 6, Name = "Луна", Breed = "Персидская", Color = "Трехцветный", Age = 6 },
+    new() { Id = 7, Name = "Оливер", Breed = "Британская короткошерстная", Color = "Черный", Age = 8 },
+    new() { Id = 8, Name = "Клео", Breed = "Сиамская", Color = "Коричневый", Age = 3 },
+    new() { Id = 9, Name = "Симба", Breed = "Мейн-кун", Color = "Рыжий", Age = 5 },
+    new() { Id = 10, Name = "Ромашка", Breed = "Персидская", Color = "Белый", Age = 2 }
+];
+
+// использование набора данных
+
+
+// описание типа для набора данных
+record struct Cat(int Id, string Name, string Breed, string Color, int Age);
